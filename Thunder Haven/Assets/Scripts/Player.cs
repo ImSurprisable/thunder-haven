@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+   public static Player Instance { get; private set; }
+
+
 
    private Camera mainCamera;
 
@@ -21,13 +25,23 @@ public class Player : MonoBehaviour
    private float maxBulletDistance = 250f;
    [SerializeField] private LayerMask bulletLayerMask;
 
+   [SerializeField]private GunSO activeWeapon;
+   private float fireTimer;
+   private int ammoCount;
+   private bool isReloading;
+
+
    private Vector2 mousePosition;
    private Vector2 lookDirection;
 
-
+   private void Awake()
+   {
+      Instance=this;
+   }
    private void Start()
    {
       mainCamera = Camera.main;
+      ammoCount = activeWeapon.ammoCount;
    }
 
    private void Update()
@@ -36,11 +50,56 @@ public class Player : MonoBehaviour
       lookDirection = (mousePosition - (Vector2)transform.position).normalized;
 
       HandleMovement();
-      
-      if (Input.GetKey(KeyCode.Mouse0))
+
+      if (Input.GetKeyDown(KeyCode.R) && !isReloading)
       {
-         Shoot();
+         StartReload(activeWeapon.reloadSpeed);
       }
+
+      if (fireTimer <=0f && ammoCount>0 && !isReloading)
+      {
+         switch(activeWeapon.fireType)
+         {
+            case GunSO.FireType.Single:
+               if (Input.GetKeyDown(KeyCode.Mouse0))
+               {
+                  Shoot();
+                  fireTimer = activeWeapon.fireSpeed;
+               }  
+               break;
+
+            case GunSO.FireType.Burst:
+               if (Input.GetKeyDown(KeyCode.Mouse0))
+                  {
+                     Shoot();
+                     fireTimer = activeWeapon.fireSpeed;
+                  }  
+               break;
+
+            case GunSO.FireType.Automatic:
+               if (Input.GetKey(KeyCode.Mouse0))
+                  {
+                     Shoot();
+                     fireTimer = activeWeapon.fireSpeed;
+                  }  
+               break;
+
+         }
+      }
+
+      fireTimer -= Time.deltaTime;
+   }
+
+   private void StartReload(float reloadTime)
+   {
+      isReloading = true;
+      Invoke(nameof(Reload),reloadTime);
+   }
+
+   private void Reload()
+   {
+      isReloading = false;
+      ammoCount = activeWeapon.ammoCount;
    }
 
    private void HandleMovement()
@@ -69,8 +128,14 @@ public class Player : MonoBehaviour
       if (hit) {
          Debug.Log("Hit: " + hit.transform.gameObject.name);
       }
+
+      ammoCount--; 
    }
 
+   public int GetAmmo()
+   {
+      return ammoCount;
+   }
 
 }
 
