@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GunSO;
 
 public class Player : MonoBehaviour
 {
@@ -41,10 +42,21 @@ public class Player : MonoBehaviour
    private void Start()
    {
       mainCamera = Camera.main;
-      ammoCount = activeWeapon.ammoCount;
+
+      InventoryManager.Instance.OnSelectedSlotChanged += InventoryManager_OnSelectedSlotChanged;
    }
 
-   private void Update()
+   private void InventoryManager_OnSelectedSlotChanged(object sender, EventArgs e)
+   {
+      GunSO lastActiveWeapon = activeWeapon;
+      activeWeapon = InventoryManager.Instance.GetActiveGunSO();
+
+      if (lastActiveWeapon != activeWeapon) {
+         ammoCount = activeWeapon.ammoCount;
+      }
+   }
+
+    private void Update()
    {
       mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
       lookDirection = (mousePosition - (Vector2)transform.position).normalized;
@@ -60,7 +72,7 @@ public class Player : MonoBehaviour
       {
          switch(activeWeapon.fireType)
          {
-            case GunSO.FireType.Single:
+            case FireType.Single:
                if (Input.GetKeyDown(KeyCode.Mouse0))
                {
                   Shoot();
@@ -68,7 +80,7 @@ public class Player : MonoBehaviour
                }  
                break;
 
-            case GunSO.FireType.Burst:
+            case FireType.Burst:
                if (Input.GetKeyDown(KeyCode.Mouse0))
                   {
                      Shoot();
@@ -76,7 +88,7 @@ public class Player : MonoBehaviour
                   }  
                break;
 
-            case GunSO.FireType.Automatic:
+            case FireType.Automatic:
                if (Input.GetKey(KeyCode.Mouse0))
                   {
                      Shoot();

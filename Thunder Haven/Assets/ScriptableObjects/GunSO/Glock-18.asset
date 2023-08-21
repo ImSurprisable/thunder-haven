@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a5872a3e021d8448a110885f3d3520, type: 3}
   m_Name: Glock-18
   m_EditorClassIdentifier: 
-  fireSpeed: 0.2
+  droppedPrefab: {fileID: 5801234316816733994, guid: 1ff42d39d6e6b4e498e418c29cbd72c0, type: 3}
+  name: Glock-18
+  heldSprite: {fileID: 21300000, guid: e65250d33a472b44baed2ba1bab9da3a, type: 3}
+  iconSprite: {fileID: 21300000, guid: df2f69cfa67a615468f89bc6c610ddde, type: 3}
+  damage: 18
   ammoCount: 20
   reloadSpeed: 2
-  damage: 18
-  name: Glock-18
+  fireSpeed: 0.2
   fireType: 2
+  weaponType: 1

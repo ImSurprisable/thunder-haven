@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a5872a3e021d8448a110885f3d3520, type: 3}
   m_Name: P90
   m_EditorClassIdentifier: 
-  fireSpeed: 0.05
+  droppedPrefab: {fileID: 6557098695464868436, guid: 357cc881033b8e84bbc1afb5ac5041cf, type: 3}
+  name: P90
+  heldSprite: {fileID: 21300000, guid: e65250d33a472b44baed2ba1bab9da3a, type: 3}
+  iconSprite: {fileID: 21300000, guid: 6c9b4528482bf6543bb1b2508e3b8548, type: 3}
+  damage: 5
   ammoCount: 40
   reloadSpeed: 2.5
-  damage: 5
-  name: P90
+  fireSpeed: 0.05
   fireType: 0
+  weaponType: 0
