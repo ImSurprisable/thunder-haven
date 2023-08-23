@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static GunSO;
+#pragma warning disable IDE0051
+#pragma warning disable IDE0044
 
 public class InventoryManager : MonoBehaviour
 {
-
     public static InventoryManager Instance { get; private set; }
 
     public event EventHandler OnSelectedSlotChanged;
@@ -89,6 +90,8 @@ public class InventoryManager : MonoBehaviour
         droppedItem.DestroySelf();
         OnPrimaryChanged?.Invoke(this, EventArgs.Empty);
         OnSelectedSlotChanged?.Invoke(this, EventArgs.Empty);
+
+        Debug.Log("Primary: " + primaryGunSO.name);
     }
     public void PickupSecondaryItem(DroppedItem droppedItem)
     {
@@ -97,11 +100,13 @@ public class InventoryManager : MonoBehaviour
             DropSecondaryItem();
         }
 
-        primaryGunSO = droppedItem.GetGunSO();
+        secondaryGunSO = droppedItem.GetGunSO();
 
         droppedItem.DestroySelf();
         OnSecondaryChanged?.Invoke(this, EventArgs.Empty);
         OnSelectedSlotChanged?.Invoke(this, EventArgs.Empty);
+
+        Debug.Log("Secondary: " + secondaryGunSO.name);
     }
 
 
@@ -112,17 +117,21 @@ public class InventoryManager : MonoBehaviour
 
         RemoveItem(WeaponType.Primary);
         
-        Instantiate(droppedPrefab, Player.Instance.transform.position, Quaternion.identity);
+        Transform droppedItemTransform = Instantiate(droppedPrefab, Player.Instance.transform.position, Quaternion.identity);
+        droppedItemTransform.GetComponent<DroppedItem>().SetAmmoCount(Player.Instance.GetAmmo());
+
         OnPrimaryChanged?.Invoke(this, EventArgs.Empty);
         OnSelectedSlotChanged?.Invoke(this, EventArgs.Empty);
     }
     public void DropSecondaryItem()
     {
-        Transform droppedPrefab = primaryGunSO.droppedPrefab;
+        Transform droppedPrefab = secondaryGunSO.droppedPrefab;
 
         RemoveItem(WeaponType.Secondary);
         
-        Instantiate(droppedPrefab, Player.Instance.transform.position, Quaternion.identity);
+        Transform droppedItemTransform = Instantiate(droppedPrefab, Player.Instance.transform.position, Quaternion.identity);
+        droppedItemTransform.GetComponent<DroppedItem>().SetAmmoCount(Player.Instance.GetAmmo());
+
         OnSecondaryChanged?.Invoke(this, EventArgs.Empty);
         OnSelectedSlotChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -178,7 +187,10 @@ public class InventoryManager : MonoBehaviour
             return primaryGunSO;
         } else if (selectedSlot == Slot.Secondary) {
             return secondaryGunSO;
+        } else if (selectedSlot == Slot.Knife || selectedSlot == Slot.Spike) {
+            return null;
         }
+        
 
         Debug.LogWarning("Returning GunSO as null");
         return null;

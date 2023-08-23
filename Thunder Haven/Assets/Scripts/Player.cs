@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static GunSO;
+#pragma warning disable IDE0051
+#pragma warning disable IDE0044
+#pragma warning disable IDE0090
 
 public class Player : MonoBehaviour
 {

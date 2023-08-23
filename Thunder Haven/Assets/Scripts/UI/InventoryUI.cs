@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static InventoryManager;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -18,9 +19,27 @@ public class InventoryUI : MonoBehaviour
     {
         InventoryManager.Instance.OnPrimaryChanged += InventoryManager_OnPrimaryChanged;
         InventoryManager.Instance.OnSecondaryChanged += InventoryManager_OnSecondaryChanged;
+        InventoryManager.Instance.OnSelectedSlotChangedUI += InventoryManager_OnSelectedSlotChangedUI;
 
         primaryInventorySlot.UpdateVisual(null, "Empty");
         secondaryInventorySlot.UpdateVisual(null, "Empty");
+    }
+
+    private void InventoryManager_OnSelectedSlotChangedUI(object sender, InventoryManager.OnSelectedSlotChangedUIEventArgs e)
+    {
+        switch (e.selectedSlot)
+        {
+            case Slot.Primary:
+                
+                break;
+            case Slot.Secondary:
+            
+                break;
+            case Slot.Knife:
+                break;
+            case Slot.Spike:
+                break;
+        }
     }
 
     private void InventoryManager_OnSecondaryChanged(object sender, EventArgs e)

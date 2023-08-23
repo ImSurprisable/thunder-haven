@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+#pragma warning disable IDE0051
+#pragma warning disable IDE0044
 
 public class InventorySingleUI : MonoBehaviour
 {
